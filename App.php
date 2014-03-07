@@ -74,7 +74,7 @@ class App
 	{
 		foreach ($paths as $id => $value)
 		{
-			$this['path' . $id] = $value;
+			$this['path.' . $key] = $value;
 		}
 	}
 
