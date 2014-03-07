@@ -36,38 +36,24 @@ class App
 
 	public function register($provider, $overwrite = false)
 	{
-		if (in_array($provider, $this->serviceProviders) && !$overwrite)
-		{
-			throw new \Exception("Cannot create service provider, provider already exists!");
+		if (isset($this->serviceProviders[$provider]) && !$overwrite) return $provider;
 
-			return false;
+		if (is_string($provider))
+		{
+			$provider = $this->resolveProviderClass($provider);
 		}
 
-		if (is_object($provider) || is_string($provider))
-		{
-			if (is_string($provider) && class_exists($provider))
-			{
-				$this->triggerProviderRegister(new $provider);
-			} else if (is_object($provider)) {
-				$this->triggerProviderRegister($provider);
-			} else {
-				throw new \Exception("Cannot create service provider, $provider has to be a instance or a string!");
+		$provider->register();
 
-				return false;
-			}
-			
-			$this->serviceProviders[] = $provider;
+		if ($this->booted) $provider->boot();
 
-			return true;
-		}
-
-		throw new \Exception("Cannot create service provider, please check your code");
-
-		return false;
+		return $provider;
 	}
 
 	/**
-	 * Bind the install paths
+	 * Bind the install paths to the application
+	 *
+	 * @param  $paths The paths specified in the paths.php file
 	 */
 	
 	public function bindInstallPaths(array $paths = array())
@@ -76,6 +62,37 @@ class App
 		{
 			$this['path.' . $key] = $value;
 		}
+	}
+
+	/**
+	 * Register the core class aliases in the container
+	 *
+	 * @return  void
+	 */
+	
+	public function registerCoreContainerAliases()
+	{
+		$aliases = array(
+			'app' => 'Flyer\Components\Foundation\App',
+			'router' => 'Flyer\Components\Routing\Router',
+		);
+
+		foreach ($aliases as $key => $alias)
+		{
+			$this->alias($key, $alias);
+		}
+	}
+
+	/**
+	 * Resolves the provider's class
+	 *
+	 * @param $provider The Service Provider
+	 * @return $provider The resolved Service Provider object
+	 */
+	
+	protected function resolveProviderClass($provider)
+	{
+
 	}
 
 	protected function triggerProviderRegister($provider)
