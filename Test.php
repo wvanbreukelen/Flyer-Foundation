@@ -1,10 +1,7 @@
 <?php
 
-require('Registry.php');
+require('App.php');
 
-use Flyer\Components\Foundation\Registry;
+$app = new Flyer\Components\Foundation\App();
 
-Registry::set('name', 'Bob');
-Registry::update('name', 'Bill');
-
-echo Registry::get('name');
+$app->register('TestServiceProvider');
