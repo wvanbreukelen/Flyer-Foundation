@@ -66,6 +66,18 @@ class App
 		return false;
 	}
 
+	/**
+	 * Bind the install paths
+	 */
+	
+	public function bindInstallPaths(array $paths = array())
+	{
+		foreach ($paths as $id => $value)
+		{
+			$this['path' . $id] = $value;
+		}
+	}
+
 	protected function triggerProviderRegister($provider)
 	{
 		return (is_object($provider)) ? $provider->register() : false;
