@@ -1,8 +1,9 @@
 <?php namespace Flyer\Components\Foundation;
 
+use Flyer\Components\Container;
 use Flyer\Components\Foundation\ServiceProviders;
 
-class App
+class App extends Container
 {
 
 	/**
