@@ -1,6 +1,6 @@
 <?php
 
-use Flyer\Components\Facades\Facade;
+use Flyer\Components\Facade;
 
 /**
  * Bind the Application into the container
